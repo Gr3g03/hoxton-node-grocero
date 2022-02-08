@@ -100,9 +100,9 @@ function addItemToCart(itemId: number) {
   if (existingItem) {
     existingItem.quantity += 1
   } else {
-    const itemToAdd: any = state.items.find(item => item.id == itemId)
-
-    state.cart.push({ ...itemToAdd, quantity: 1 })
+    const itemToAdd = state.items.find(item => item.id == itemId)
+    if (itemToAdd !== undefined)
+      state.cart.push({ ...itemToAdd, quantity: 1 })
   }
 
   renderCartItems()
@@ -134,9 +134,11 @@ function renderStoreItem(item: Items): void {
   `
 
   const addBtn: HTMLButtonElement | null = listItemEl.querySelector('button')
-  addBtn.addEventListener('click', () => addItemToCart(item.id))
+  if (addBtn !== null)
+    addBtn.addEventListener('click', () => addItemToCart(item.id))
 
-  storeItemList.appendChild(listItemEl)
+  if (storeItemList !== null)
+    storeItemList.appendChild(listItemEl)
 }
 
 function renderStoreItems(): void {
@@ -160,16 +162,20 @@ function renderCartItem(item: Cart) {
   `
 
   const addBtn: HTMLButtonElement | null = listItemEl.querySelector('.add-btn')
-  addBtn.addEventListener('click', event => addItemToCart(item.id))
+  if (addBtn !== null)
+    addBtn.addEventListener('click', event => addItemToCart(item.id))
 
   const removeBtn: HTMLButtonElement | null = listItemEl.querySelector('.remove-btn')
-  removeBtn.addEventListener('click', event => removeItemFromCart(item.id))
+  if (removeBtn !== null)
+    removeBtn.addEventListener('click', event => removeItemFromCart(item.id))
 
-  cartItemList.appendChild(listItemEl)
+  if (cartItemList !== null)
+    cartItemList.appendChild(listItemEl)
 }
 
 function renderCartItems() {
-  cartItemList.innerHTML = ''
+  if (cartItemList !== null)
+    cartItemList.innerHTML = ''
 
   state.cart.forEach(renderCartItem)
 
@@ -184,6 +190,7 @@ function renderTotal() {
 
   state.cart.forEach(item => (total += item.quantity * item.price))
 
-  totalNumber.innerText = `£${total.toFixed(2)}`
+  if (totalNumber !== null)
+    totalNumber.innerText = `£${total.toFixed(2)}`
 }
 
