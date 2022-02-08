@@ -1,12 +1,13 @@
 import './style.css'
 
-const app = document.querySelector<HTMLDivElement>('#app')!
+// const app = document.querySelector<HTMLDivElement>('#app')!
 
 
 type Items = {
   id: number,
   name: string,
   price: number
+
 };
 
 type Cart = {
@@ -76,23 +77,30 @@ const state: {
   cart: []
 }
 
-function getFileName(item: Items) {
+
+const storeItemList: HTMLUListElement | null = document.querySelector('.store--item-list')
+const cartItemList: HTMLUListElement | null = document.querySelector('.cart--item-list')
+const totalNumber: HTMLSpanElement | null = document.querySelector('.total-number')
+
+
+
+function getFileName(item: Items): string {
   const fileName = `${item.id
     .toString()
     .padStart(3, '0')}-${item.name.replaceAll(' ', '-')}`
 
-  return `assets/icons/${fileName}.svg`
+  return `src/assets/icons/${fileName}.svg`
 }
 
 /* STATE ACTIONS */
 
-function addItemToCart(itemId: Cart) {
+function addItemToCart(itemId: number) {
   const existingItem = state.cart.find(item => item.id == itemId)
 
   if (existingItem) {
     existingItem.quantity += 1
   } else {
-    const itemToAdd = state.items.find(item => item.id == itemId)
+    const itemToAdd: any = state.items.find(item => item.id == itemId)
 
     state.cart.push({ ...itemToAdd, quantity: 1 })
   }
@@ -100,7 +108,7 @@ function addItemToCart(itemId: Cart) {
   renderCartItems()
 }
 
-function removeItemFromCart(itemID) {
+function removeItemFromCart(itemID: number) {
   const itemToUpdate = state.cart.find(item => item.id == itemID)
 
   if (itemToUpdate && itemToUpdate.quantity > 1) {
@@ -114,10 +122,9 @@ function removeItemFromCart(itemID) {
 
 /* RENDER THE STORE */
 
-const storeItemList = document.querySelector('.store--item-list')
 
-function renderStoreItem(item) {
-  const listItemEl = document.createElement('li')
+function renderStoreItem(item: Items): void {
+  const listItemEl: HTMLLIElement = document.createElement('li')
 
   listItemEl.innerHTML = `
     <div class="store--item-icon">
@@ -126,13 +133,13 @@ function renderStoreItem(item) {
     <button>Add to cart</button>
   `
 
-  const addBtn = listItemEl.querySelector('button')
+  const addBtn: HTMLButtonElement | null = listItemEl.querySelector('button')
   addBtn.addEventListener('click', () => addItemToCart(item.id))
 
   storeItemList.appendChild(listItemEl)
 }
 
-function renderStoreItems() {
+function renderStoreItems(): void {
   state.items.forEach(renderStoreItem)
 }
 
@@ -140,10 +147,9 @@ renderStoreItems()
 
 /* RENDER THE CART */
 
-const cartItemList = document.querySelector('.cart--item-list')
 
-function renderCartItem(item) {
-  const listItemEl = document.createElement('li')
+function renderCartItem(item: Cart) {
+  const listItemEl: HTMLLIElement = document.createElement('li')
 
   listItemEl.innerHTML = `
     <img class="cart--item-icon" src=${getFileName(item)} alt="${item.name}">
@@ -153,10 +159,10 @@ function renderCartItem(item) {
     <button class="quantity-btn add-btn center">+</button>
   `
 
-  const addBtn = listItemEl.querySelector('.add-btn')
+  const addBtn: HTMLButtonElement | null = listItemEl.querySelector('.add-btn')
   addBtn.addEventListener('click', event => addItemToCart(item.id))
 
-  const removeBtn = listItemEl.querySelector('.remove-btn')
+  const removeBtn: HTMLButtonElement | null = listItemEl.querySelector('.remove-btn')
   removeBtn.addEventListener('click', event => removeItemFromCart(item.id))
 
   cartItemList.appendChild(listItemEl)
@@ -172,7 +178,6 @@ function renderCartItems() {
 
 /* RENDER THE TOTAL */
 
-const totalNumber = document.querySelector('.total-number')
 
 function renderTotal() {
   let total = 0
