@@ -173,7 +173,7 @@ function renderCartItem(item: Cart) {
     cartItemList.appendChild(listItemEl)
 }
 
-function renderCartItems() {
+function renderCartItems(): void {
   if (cartItemList !== null)
     cartItemList.innerHTML = ''
 
@@ -185,7 +185,7 @@ function renderCartItems() {
 /* RENDER THE TOTAL */
 
 
-function renderTotal() {
+function renderTotal(): void {
   let total = 0
 
   state.cart.forEach(item => (total += item.quantity * item.price))
